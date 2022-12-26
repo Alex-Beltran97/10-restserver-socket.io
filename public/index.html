@@ -39,7 +39,7 @@
 
         const body = { "id_token": response.credential };
 
-        fetch(`${ process.env.BASE_URL || "http://localhost:"+process.env.PORT }/api/auth/google`, {
+        fetch(`http://localhost:${ process.env.PORT }/api/auth/google`, {
           method: "POST",
           headers: {
             "Content-type": "application/json"
