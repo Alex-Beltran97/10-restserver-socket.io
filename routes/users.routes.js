@@ -7,8 +7,14 @@ const {
   usersPut,
   usersDelete,
 } = require("../controllers/users.controllers");
+
 const { isValidRole, emailExists, existsUserById, queryIsNumber } = require("../helpers/db-validators");
-const { validateFileds } = require("../middlewares/validate-fields");
+
+// const { validateFileds } = require("../middlewares/validate-fields");
+// const { validateJwt } = require("../middlewares/validate-jwt");
+// const { isAdminRole, hasRole } = require("../middlewares/validate-roles");
+
+const { validateFileds, validateJwt, hasRole } = require("../middlewares/index");
 
 const router = Router();
 
@@ -33,6 +39,9 @@ router.put("/:id", [
 ],usersPut );
 
 router.delete("/:id", [
+  validateJwt,
+  // isAdminRole,
+  hasRole("ADMIN_ROLE","SALES_ROLE"),
   check("id", "Is not a valid ID").isMongoId(),
   check("id").custom( existsUserById ),
   validateFileds
