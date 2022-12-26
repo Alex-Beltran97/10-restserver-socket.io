@@ -12,8 +12,8 @@ router.post("/login", [
 ],login );
 
 router.post("/google", [
-  // check("id_token", "Id token must be mandatory").not().isEmpty(),
-  // validateFileds
+  check("id_token", "Id token must be mandatory").not().isEmpty(),
+  validateFileds
 ], googleSignIn );
 
 module.exports = router;
