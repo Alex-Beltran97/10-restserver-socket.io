@@ -2,6 +2,7 @@ const { response } = require("express");
 const User = require("../models/User");
 const bcryptjs = require("bcryptjs");
 const { generateJWT } = require("../helpers/createJwt");
+const { googleVerify } = require("../helpers/google-verify");
 
 const login = async (req, res = response) =>{
   const { email, password } = req.body;
@@ -38,8 +39,53 @@ const login = async (req, res = response) =>{
       msg:"Something went wrong. Please report to your administrator"
     });
   };
-}
+};
+
+const googleSignIn = async (req, res = response)=>{
+
+  const { id_token } = req.body;
+
+  try{
+
+    const { email, name, img } = await googleVerify( id_token );
+
+    let user = await User.findOne({ email });
+
+    if( !user ){
+
+      const data = {
+        email,
+        name,
+        img,
+        role: "USER_ADMIN",
+        password: " :p"
+      };
+
+      user = new User( data );
+
+      await user.save();
+    };
+
+    if( !user.state ){
+      return res.status(401).json({
+        msg: "Report to adminsitrator. User was blocked."
+      })
+    };
+
+    const token = await generateJWT( user.id );
+
+    return res.status(200).json({ user, token });
+
+  }catch(error){
+    console.log(error);
+
+    res.status(400).json({
+      msg: "Token could not be verified"
+    });
+  };
+};
 
 module.exports = {
-  login
+  login,
+  googleSignIn
 };
