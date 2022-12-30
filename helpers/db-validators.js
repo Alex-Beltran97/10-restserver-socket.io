@@ -1,5 +1,7 @@
+const { Category, Product } = require("../models");
 const Role = require("../models/Role");
 const User = require("../models/User");
+
 
 const regexNumber = /^\d+$/;
 
@@ -35,9 +37,29 @@ const queryIsNumber = async (query = 0) =>{
   };
 };
 
+const categoryIDExists = async ( id = "" ) =>{
+  
+  const idExists = await Category.findById(id);  
+
+  if( !idExists ){
+    throw new Error("Category ID was not found");
+  };
+};
+
+const existsProductById = async ( id ) =>{
+  const idExists = await Product.findById( id );
+
+  if(!idExists){
+    throw new Error("This ID does not exists");
+  };
+  
+};
+
 module.exports = { 
   isValidRole,
   emailExists,
   existsUserById,
-  queryIsNumber
+  queryIsNumber,
+  categoryIDExists,
+  existsProductById
 };

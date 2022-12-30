@@ -1,8 +1,8 @@
 const { response } = require("express");
-const User = require("../models/User");
 const bcryptjs = require("bcryptjs");
 const { generateJWT } = require("../helpers/createJwt");
 const { googleVerify } = require("../helpers/google-verify");
+const User = require("../models/User");
 
 const login = async (req, res = response) =>{
 
@@ -59,7 +59,8 @@ const googleSignIn = async (req, res = response)=>{
         name,
         img,
         role: "USER_ADMIN",
-        password: " :p"
+        password: " :p",
+        google: true
       };
 
       user = new User( data );

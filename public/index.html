@@ -50,6 +50,8 @@
           .then( res =>res.json())
           .then( res =>{
 
+            console.log(body);
+
             const email = res.user.email;
             const name = res.user.name;
             const img = res.user.img;
