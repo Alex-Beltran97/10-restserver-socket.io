@@ -12,6 +12,8 @@ const isValidRole = async ( role = "") => {
   if(!roleExists){
     throw new Error(`Rol ${ role } does not exists`);
   };
+
+  return true;
 };
 
 const emailExists = async ( email = "") =>{
@@ -20,6 +22,8 @@ const emailExists = async ( email = "") =>{
   if(emailIsExist){
     throw new Error("This email is already registered");
   };
+
+  return true;
 };
 
 const existsUserById = async (id) =>{
@@ -29,12 +33,15 @@ const existsUserById = async (id) =>{
     throw new Error("This ID does not exists");
   };
   
+  return true;
 };
 
 const queryIsNumber = async (query = 0) =>{
   if(!regexNumber.test(query)){
     throw new Error("Queries must be a number")
   };
+
+  return true;
 };
 
 const categoryIDExists = async ( id = "" ) =>{
@@ -44,6 +51,8 @@ const categoryIDExists = async ( id = "" ) =>{
   if( !idExists ){
     throw new Error("Category ID was not found");
   };
+
+  return true;
 };
 
 const existsProductById = async ( id ) =>{
@@ -52,7 +61,20 @@ const existsProductById = async ( id ) =>{
   if(!idExists){
     throw new Error("This ID does not exists");
   };
+
+  return true;
   
+};
+
+// Validate Allowed Collections
+
+const allowedCollections = ( collection = "", collections = [] ) =>{
+
+  const included = collections.includes( collection );
+
+  if( !included ) throw new Error(`Collection ${ collection } is not allowed, ${ collections }`);
+
+  return true;
 };
 
 module.exports = { 
@@ -61,5 +83,6 @@ module.exports = {
   existsUserById,
   queryIsNumber,
   categoryIDExists,
-  existsProductById
+  existsProductById,
+  allowedCollections
 };

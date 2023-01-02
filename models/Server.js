@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const { dbConnection } = require("../db/config");
+const fileUpload = require("express-fileupload");
 
 class Server {
   constructor() {
@@ -12,6 +13,7 @@ class Server {
       categories: "/api/categories",
       products: "/api/products",
       search: "/api/search",
+      uploads: "/api/uploads",
       users: "/api/users",
     };
 
@@ -38,19 +40,26 @@ class Server {
 
     this.app.use(express.static("public"));
 
-    // Public directory
-
     // Read and parse of body
     this.app.use(express.json());
+
+    // fileupload 
+    this.app.use(fileUpload({
+      useTempFiles : true,
+      tempFileDir : '/tmp/',
+      createParentPath: true
+    }));
+
   }
 
   routes() {
-    const { auth, categories, users, products, search } = this.paths;
+    const { auth, categories, users, products, search, uploads } = this.paths;
 
     this.app.use(auth, require("../routes/auth.routes"));
     this.app.use(categories, require("../routes/categories.routes"));
     this.app.use(products, require("../routes/products.routes"));
     this.app.use(search, require("../routes/search.routes"));
+    this.app.use(uploads, require("../routes/uploads.routes"));
     this.app.use(users, require("../routes/users.routes"));
   }
 
@@ -59,6 +68,6 @@ class Server {
       console.log(`Server listening in port http://localhost:${this.port}`);
     });
   }
-}
+};
 
 module.exports = Server;
