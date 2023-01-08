@@ -5,80 +5,44 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Google Sign In</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
   </head>
-  <body>
+  <body class="container">
     <h1 id="title">Google Sign - In</h1>
     <hr />
 
-    <div
-      id="g_id_onload"
-      data-client_id="964625295828-1h0e9nqn7t2agplsh62f13qubn0817dn.apps.googleusercontent.com"
-      data-auto_prompt="false"
-      data-callback="handleCredentialResponse"
-    ></div>
-    <div
-      class="g_id_signin"
-      data-type="standard"
-      data-size="large"
-      data-theme="outline"
-      data-text="sign_in_with"
-      data-shape="rectangular"
-      data-logo_alignment="left"
-    ></div>
+    <div class="row mt-5">
+      <div class="col-sm-6">
+        <div
+          id="g_id_onload"
+          data-client_id="808381283910-fsv584tdkqfmusjt6andcs2i8cfsa27o.apps.googleusercontent.com"
+          data-auto_prompt="false"
+          data-callback="handleCredentialResponse"
+        ></div>
+        <div
+          class="g_id_signin"
+          data-type="standard"
+          data-size="large"
+          data-theme="outline"
+          data-text="sign_in_with"
+          data-shape="rectangular"
+          data-logo_alignment="left"
+        ></div>
+        <br />
+        <button id="google_signout" class="btn btn-primary">
+          Sign Out
+        </button>
+      </div>
+      <div class="col-sm-6">
 
-    <button id="google_signout">
-      Sign Out
-    </button>
+      </div>
+    </div>
 
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-
-    <script>
-      
-      function handleCredentialResponse( response ) {
-        // Google Token: ID_TOKEN
-
-        const body = { "id_token": response.credential };
-
-
-        fetch(`http://localhost:8080/api/auth/google`, {
-          method: "POST",
-          headers: {
-            "Content-type": "application/json"
-          },
-          body: JSON.stringify(body)
-        })
-          .then( res =>res.json())
-          .then( res =>{
-
-            console.log(body);
-
-            const email = res.user.email;
-            const name = res.user.name;
-            const img = res.user.img;
-
-            localStorage.setItem( "email", email );
-
-          })
-          .catch( err => console.log(err));
-      };
-
-      const button = document.getElementById("google_signout");
-
-      button.onclick = async () =>{
-
-        google.accounts.id.disableAutoSelect();
-
-        const email = await localStorage.getItem("email");
-
-        google.accounts.id.revoke(email, done =>{
-
-          localStorage.clear();
-
-          location.reload();
-        });
-      };
-
-
-    </script>
+    
+    <script src="./js/auth.js"></script>
   </body>
 </html>
